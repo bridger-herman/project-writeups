@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+
+  <link rel="stylesheet"
+  href="https://bridger-herman.github.io/assets/css/figure.css">
+  <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+    </head>
+    <body>
+        <article>
+            <h1>CSCI 5607 Homework 1 - Image Processing</h1>
+
+            <p>This homework includes simple image processing functionality</p>
+
+            <h2 id="features">Features</h2>
+            <p>The following features are implemented:</p>
+
+            <ul>
+                <li>Brightness adjustment</li>
+                <li>Contrast adjustment</li>
+                <li>Channel extraction</li>
+                <li>Random noise</li>
+                <li>Saturation adjustment</li>
+                <li>Image cropping</li>
+                <li>Quantization</li>
+                <li>Blur</li>
+                <li>Edge detection</li>
+                <li>Floyd-Steinberg Dithering</li>
+                <li>Image scaling</li>
+                <li>Image rotation</li>
+                <li>Triangle wave nonlinear filter</li>
+                <li>Insect eye nonlinear filter (nonphotorealistic)</li>
+            </ul>
+
+            <h2 id="command-line-interface">Command Line Interface</h2>
+            <p>The following command-line flags are supported:</p>
+            <ul>
+                <li>
+                    <code>--noise [factor]</code>
+                </li>
+                <li>
+                    <code>--brightness [factor]</code>
+                </li>
+                <li>
+                    <code>--contrast [factor]</code>
+                </li>
+                <li>
+                    <code>--saturation [factor]</code>
+                </li>
+                <li>
+                    <code>--crop [x] [y] [width] [height]</code>
+                </li>
+                <li>
+                    <code>--extract_channel [channel_num]</code>
+                </li>
+                <li>
+                    <code>--quantize [num_bits]</code>
+                </li>
+                <li>
+                    <code>--random_dither [num_bits]</code>
+                </li>
+                <li>
+                    <code>--blur [mask_size]</code>
+                </li>
+                <li>
+                    <code>--sharpen [mask_size]</code>
+                </li>
+                <li>
+                    <code>--edge_detect</code>
+                </li>
+                <li>
+                    <code>--FloydSteinbergDither [num_bits]</code>
+                </li>
+                <li>
+                    <code>--scale [sx] [sy]</code>
+                </li>
+                <li>
+                    <code>--rotate [angle]</code>
+                </li>
+                <li>
+                    <code>--fun [amplitude] [width]</code>
+                </li>
+                <li>
+                    <code>--nonphotorealistic [probability] [max_radius]</code>
+                </li>
+                <li>
+                    <code>--sampling [method_num]</code>
+                </li>
+            </ul>
+
+            <h2 id="challenges">Challenges</h2>
+            <p>The most time-consuming challenges of this project have been:</p>
+            <ol>
+                <li>Rotation</li>
+                <li>Resampling (mostly Bilinear)</li>
+                <li>Nonphotorealistic filter</li>
+                <li>Command line argument parsing</li>
+                <li>Translating the original code into Rust</li>
+                <li>Figuring out the proper way to apply the contrast filter</li>
+            </ol>
+            <h3>Rotation</h3>
+            <p>
+                Conceptually, rotation was a bit strange to think about for me. I
+                had a hard time adjusting between the old and new coordinates, and
+                it took a while for me to figure out where all the trigonometry
+                fit in. Finally, after drawing several diagrams and reading
+                the slides extensively, I was able to make it happen.
+            </p>
+
+            <h3>Resampling</h3>
+            <p>
+                Once I wrapped my head around the concept of mapping the old image
+                coordinates onto the new image coordinates, I then tackled the
+                image resampling problem. Initially for scaling and rotation, I
+                just did point sampling due to its ease of implementation.
+                However, it can produce pretty jagged results, which is why
+                Bilinear and Gaussian sampling are preferred. I actually completed
+                Gaussian sampling right after point sampling, because the method
+                seemed more general and was a bit easier for me to wrap my head
+                around. Once I was able to get this, Bilinear sampling wasn't too
+                much more difficult to implement.
+            </p>
+
+            <h3>Nonphotorealistic filter</h3>
+            <p>
+                I'm not certain if the filter I implemented can actually be
+                considered nonphotorealistic, because essentially it's just a
+                distortion filter applied many times to small areas over an image,
+                but I'm including it because I think it looks cool. The filter
+                first distributes a bunch of random points throughout an image
+                using a <a
+                            href="https://www.jasondavies.com/poisson-disc/">Poisson
+                            Disc sampling</a>
+                algorithm, then it creates a small distortion at a radius around
+                each of those points. The result is something resembling a
+                kaleidoscope, or what we imagine insects to see.
+            </p>
+
+            <h3>Command line argument parsing</h3>
+            <p>
+                Since I reimplemented the starter code in Rust, I also needed to
+                redo the argument parsing. I took a slightly different approach
+                and used a library (<a
+                    href="https://crates.io/crates/clap">clap</a>) to parse the
+                arguments. It is quite convenient, but does not allow for
+                iteration over the arguments in order, so I had to manually pull
+                out all of the indices myself. All in all though, the argument
+                parsing code is only about 100 lines of code versus the 300 from
+                the original starter code (perhaps apples to oranges though,
+                comparing Rust to C++).
+            </p>
+
+            <h3>Translating the original code into Rust</h3>
+            <p>
+                Since I reimplemented the original code in Rust, I thought I
+                could redesign it a bit too and make it more modular. For as
+                much as I've programmed in Rust, I haven't actually spent that
+                much time doing design - so needless to say I struggled a bit.
+                I ended up creating a <a
+                                          href="https://doc.rust-lang.org/book/second-edition/ch10-02-traits.html">trait</a>
+                called <code>Filter</code>, which every filter implements. The
+                main function constructs an ordered list of filters from
+                command line arguments, and these can all be treated as
+                similar because they implement the <code>Filter</code> trait.
+            </p>
+
+            <h3>Figuring out the proper way to apply the contrast filter</h3>
+            <p>
+                I had a little trouble wrapping my head around what exactly
+                contrast is doing; I had to draw out a little diagram for it to
+                make full sense. I've created a contrast function before, but I
+                was given the formula and didn't really understand what it was
+                doing.
+            </p>
+
+            <h2 id="implementation-details">Implementation Details</h2>
+            <p>
+                This project is implemented in pure <a href="https://www.rust-lang.org">Rust</a>.
+            </p>
+            <p>
+                The source code can be viewed on
+                <a href="https://github.umn.edu/herma582/hw1-5607">GitHub</a>.
+                A zip file for the check-in can be
+                <a href="https://github.umn.edu/herma582/hw1-5607/archive/check-in.zip">downloaded here</a>.
+                An executable (compiled for Linux x86_64) can be
+                <a
+                    href="https://github.umn.edu/herma582/hw1-5607/raw/master/bin/hw1-5607">downloaded
+                    here</a>. The compressed final source code and images can
+                be <a
+                    href="https://github.umn.edu/herma582/hw1-5607/archive/hw1-final.zip">downloaded here</a>.
+            </p>
+
+            <p>
+                Automatically generated documentation (rustdocs)
+                can also be found <a href="rustdoc/hw1_5607/index.html">here</a>.
+            </p>
+
+            <p>The following libraries (crates) were used:</p>
+            <ul>
+                <li>
+                    <a href="https://crates.io/crates/rand">rand</a> (random
+                    number generation)
+                </li>
+                <li>
+                    <a href="https://crates.io/crates/image">image</a>
+                    (<strong>only image reading and writing</strong>, even
+                    though this crate can actually do nearly all of the
+                    functions that this assignment requires)
+                </li>
+                <li>
+                    <a href="https://crates.io/crates/clap">clap</a> (argument
+                    parsing)
+                </li>
+            </ul>
+
+            <h2 id="images">Images</h2>
+            <p>
+                <strong>Note:</strong>
+                Leftmost images are the original images. All images are
+                original content that hopefully "demonstrate an understanding
+                of what each filter does."
+            </p>
+            <h3>Linear Filters</h3>
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        Brightness: <code>./hw1_5607 --input
+                            docs/assets/img/in/queenstown.jpg --brightness 2.0 --output
+                            docs/assets/img/out/brightness.png</code>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/queenstown.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/brightness.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth top-dot">
+                    <figcaption>
+                        Random Noise: <code>./hw1_5607 --input
+                            docs/assets/img/in/queenstown.jpg --noise 1.0 --output
+                            docs/assets/img/out/noise.png</code>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/queenstown.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/noise.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Contrast:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/tasman_waves.jpg --contrast 2.0 --output
+                                docs/assets/img/out/contrast_hi.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/tasman_waves.jpg --contrast 0.5 --output
+                                docs/assets/img/out/contrast_lo.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/tasman_waves.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/contrast_hi.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/contrast_lo.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Saturation:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/wintergardent.jpg --saturation
+                                2.0 --output
+                                docs/assets/img/out/saturation_hi.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/wintergardent.jpg --saturation
+                                0.0 --output
+                                docs/assets/img/out/saturation_lo.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/wintergardent.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/saturation_hi.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/saturation_lo.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Channel Extraction:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/crosswalk.jpg
+                                --extract_channel 0 --output
+                                docs/assets/img/out/extract_channel_r.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/crosswalk.jpg
+                                --extract_channel 2 --output
+                                docs/assets/img/out/extract_channel_b.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/crosswalk.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/extract_channel_r.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/extract_channel_b.png"/></li>
+                    </ul>
+                </figure>
+
+            <h3>Dithering and Quantization</h3>
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Quantize:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/raglan_sunset.jpg
+                                --quantize 4 --output
+                                docs/assets/img/out/quantize_4.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/raglan_sunset.jpg
+                                --quantize 1 --output
+                                docs/assets/img/out/quantize_1.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/raglan_sunset.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/quantize_4.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/quantize_1.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Random Dither:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/raglan_sunset.jpg
+                                --random_dither 4 --output
+                                docs/assets/img/out/random_dither_4.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/raglan_sunset.jpg
+                                --random_dither 1 --output
+                                docs/assets/img/out/random_dither_1.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/raglan_sunset.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/random_dither_4.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/random_dither_1.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Floyd-Steinberg Dither:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/raglan_sunset.jpg
+                                --FloydSteinbergDither 4 --output
+                                docs/assets/img/out/floyd_steinberg_4.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/raglan_sunset.jpg
+                                --FloydSteinbergDither 1 --output
+                                docs/assets/img/out/floyd_steinberg_1.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/raglan_sunset.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/floyd_steinberg_4.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/floyd_steinberg_1.png"/></li>
+                    </ul>
+                </figure>
+
+            <h3>Convolution Filters</h3>
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Blur:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/auckland.jpg
+                                --blur 9 --output
+                                docs/assets/img/out/blur_9.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/auckland.jpg
+                                --blur 9 --blur 9 --output
+                                docs/assets/img/out/blur_9_9.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/auckland.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/blur_9.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/blur_9_9.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Sharpen:</p>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/auckland.jpg
+                                --sharpen 9 --output
+                                docs/assets/img/out/sharpen_9.png
+                            </code>
+                        </li>
+                        <li>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/auckland.jpg
+                                --sharpen 9 --sharpen 9 --output
+                                docs/assets/img/out/sharpen_9_9.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/auckland.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/sharpen_9.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/sharpen_9_9.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Edge Detect:</p>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/dunedin.jpg
+                                    --edge_detect --output
+                                    docs/assets/img/out/edge_detect.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/dunedin.jpg
+                                    --blur 9 --blur 9
+                                    --edge_detect --output
+                                    docs/assets/img/out/edge_detect.png
+                                </code>
+                            </li>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/dunedin.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/edge_detect.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/edge_detect_blur.png"/></li>
+                    </ul>
+                </figure>
+
+            <h3>Geometric and Sampling Filters</h3>
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Crop:</p>
+                            <code>
+                                ./hw1_5607 --input
+                                docs/assets/img/in/dunedin.jpg
+                                --crop 316 92 115 115 --output
+                                docs/assets/img/out/crop.png
+                            </code>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/dunedin.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/crop.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Triangle wave distortion (fun):</p>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/road.jpg
+                                    --fun 10 50
+                                    docs/assets/img/out/triangle_50_50.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/road.jpg
+                                    --fun 40 200
+                                    docs/assets/img/out/triangle_other.png
+                                </code>
+                            </li>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/road.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/triangle_50_50.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/triangle_other.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Insect eye distortion (nonphotorealistic (?)):</p>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/flower.jpg
+                                    --nonphotorealistic 1.0 50
+                                    docs/assets/img/out/insect_1.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/flower.jpg
+                                    --nonphotorealistic 0.9 100
+                                    docs/assets/img/out/insect_2.png
+                                </code>
+                            </li>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/flower.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/insect_1.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/insect_2.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Scale (original is 90x59 pixels; scaling up by a
+                        factor of 3):</p>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/queenstown_small.png
+                                    --scale 3.0 3.0
+                                    --sampling 0
+                                    docs/assets/img/out/scale_point.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/queenstown_small.png
+                                    --scale 3.0 3.0
+                                    --sampling 1
+                                    docs/assets/img/out/scale_bilinear.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/queenstown_small.png
+                                    --scale 3.0 3.0
+                                    --sampling 2
+                                    docs/assets/img/out/scale_gaussian.png
+                                </code>
+                            </li>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/queenstown_small.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/scale_point.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/scale_bilinear.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/scale_gaussian.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Rotate:</p>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/queenstown.jpg
+                                    --rotate 60
+                                    --sampling 0
+                                    docs/assets/img/out/rotate_point.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/queenstown.jpg
+                                    --rotate 60
+                                    --sampling 1
+                                    docs/assets/img/out/rotate_bilinear.png
+                                </code>
+                            </li>
+                            <li>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/queenstown.jpg
+                                    --rotate 60
+                                    --sampling 2
+                                    docs/assets/img/out/rotate_bilinear.png
+                                </code>
+                            </li>
+                        </li>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/queenstown.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/rotate_point.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/rotate_bilinear.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/rotate_gaussian.png"/></li>
+                    </ul>
+                </figure>
+
+                <figure class="nocount fullwidth">
+                    <figcaption>
+                        <p>Proof that operation chaining works:</p>
+                                <code>
+                                    ./hw1_5607 --input
+                                    docs/assets/img/in/wintergardent.jpg
+                                    --saturation 3.0 --output
+                                    docs/assets/img/out/multi_1.png --fun 20
+                                    100 --output
+                                    docs/assets/img/out/multi_2.png --quantize
+                                    1 --output docs/assets/img/out/multi_3.png
+                                    --edge_detect --output
+                                    docs/assets/img/out/multi_4.png
+                                    --nonphotorealistic 1.0 75 --output
+                                    docs/assets/img/out/multi_5.png
+                                </code>
+                    </figcaption>
+                    <ul class="tiled-list">
+                        <li><img src="./assets/project-image-processing/img/in/wintergardent.jpg"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/multi_1.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/multi_2.png"/></li>
+                        <li>
+                            <p class="blinking">
+                                Artistic submission!
+                            </p>
+                            <img src="./assets/project-image-processing/img/out/multi_3.png"/>
+                        </li>
+                        <li><img src="./assets/project-image-processing/img/out/multi_4.png"/></li>
+                        <li><img src="./assets/project-image-processing/img/out/multi_5.png"/></li>
+                    </ul>
+                </figure>
+
+    </body>
+    </article>
+</html>
