@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+  <link rel="stylesheet"
+  href="https://bridger-herman.github.io/assets/css/figure.css">
+  <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+  </head>
+  <body>
+    <article>
+      <h1 id="csci-5607-homework-4">CSCI 5607 Homework 4 -
+        Maze Game</h1>
+
+      <p>You know what they say &emdash; that you'll dislike the first
+      graphics engine that you create? Well, this homework proved to be no
+      different. I set out with the goal of making an
+      Entity-Component-System graphics framework in Rust and then completing
+      the assignment using the framework.</p>
+
+      <p>Unfortunately, real life rarely works out as nice as our goals
+      might suggest. After sinking about 30 hours into trying to get an
+      extensible ECS working, I decided to pull the plug on it for the
+      purposes of actually finishing the assignment. The start of the
+      framework I made can be seen in <code>src/graphics_framework</code>,
+      but after I pulled the plug I definitely broke encapsulation between
+      the game logic and the framework.</p>
+
+      <p>I chose to use a <em>Star Trek</em> theme for this game - enjoy!
+      All models and textures (except the <a
+                                            href="https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.psd-dude.com%2Ftutorials%2Fresources-images%2Fmetal-and-metallic-textures-for-photoshop%2Fmetal-floor-1.jpg&f=1">
+        metal floor</a>) are original content.</p>
+
+      <h2 id="requirements">Requirements</h2>
+      <p>The following project requirements were completed:</p>
+
+      <ul>
+        <li>Walls and Doors</li>
+        <li>Keys</li>
+        <li>User Input</li>
+        <li>Collision Detection</li>
+        <li>Floor</li>
+        <li>Lighting</li>
+      </ul>
+
+      <h2 id="features">Additional Features</h2>
+      <p>The following additional features were completed:</p>
+
+      <h3 id="lighting">Lighting and Materials</h3>
+      <ul>
+        <li>
+          Texture map the walls and floors
+        </li>
+      </ul>
+
+      <h3 id="interface">User Interface</h3>
+      <ul>
+        <li>
+          Integrated keyboard and mouse control
+        </li>
+      </ul>
+
+      <h3 id="environment">Dynamic Environment</h3>
+      <ul>
+        <li>
+          Animate the process of doors opening after they are unlocked
+        </li>
+        <li>
+          Use models to represent keys, doors, and goal (models were created
+          in Blender and exported as OBJs along with their texture
+          coordinates, then run through a script)
+        </li>
+        <li>
+          Load models in OBJ format (sort of - need to use the conversion
+          script <code>tools/obj_parser.py</code>
+        </li>
+      </ul>
+
+      <h3 id="miscellaneous">Miscellaneous</h3>
+      <ul>
+        <li>
+          Video
+        </li>
+      </ul>
+
+      <h2 id="command-line">Command Line Arguments</h2>
+      <p>The application accepts one command line argument:
+          <code>[map_file]</code>: The map file to load objects from
+      </p>
+
+      <h2 id="interaction">Interaction</h2>
+      <p>The following interactions are supported in this application:</p>
+      <ul>
+        <li><strong>wasd / mouse:</strong> Move around</li>
+        <li><strong>t:</strong> Lock/unlock camera from the floor</li>
+      </ul>
+
+      <h2 id="challenges">Challenges</h2>
+      <p>The most time-consuming challenges of this project have been:</p>
+      <ol>
+        <li>Trying to design the framework (Rust)</li>
+        <li>Idiomatic collisions</li>
+      </ol>
+
+      <h3>Rust</h3>
+      <p>
+        Easily the most difficult thing about this project has been trying to
+        create a graphics framework. I've been thinking about doing this for a
+        long time, because I am extremely tired of copy-pasting OpenGL code
+        from old projects. I did some research on Entity-Component-Systems,
+        including reading several threads on the 
+        <a href="http://entity-systems-wiki.t-machine.org/">Entity Systems
+          Wiki</a>, and talking to
+        <a href="https://liamtyler.github.io">Liam Tyler</a>.
+      </p>
+
+      <p>
+        I was able to implement a very simple component framework that object
+        with components. However, I wasn't able to create anything much more
+        advanced than that... I wanted to have a global framework object, but
+        due to the limitations on Rust's borrowing system having global static
+        objects is nearly impossible. Additionally, I wanted components to
+        have a pointer to their owning object, but the Rust borrow checker
+        also doesn't like this at all.
+      </p>
+
+      <p>
+        In the end, I chose to give up the global framework and component
+        pointers in favor of actually completing the assignment, so right now
+        the "framework" is intertwined with Homework 4 specific code. In the
+        future, I hope to rewrite this framework (probably several times, and
+        maybe with some C++...) in order to get a better final product.
+      </p>
+
+      <h3>Collisions</h3>
+      <p>
+        Collisions didn't cause me nearly as much trouble as making the
+        framework did, but I still struggled a bit with them. I ended up
+        adding a list of acquired keys into the scene, and adding things to it
+        whenever a collision with a key was detected. Collisions with the
+        camera were detected using a simple cube collision algorithm, as shown
+        in Figures 1 and 2.
+      </p>
+
+      <figure>
+        <ul class="tiled-list">
+          <li><img src="./assets/project-simple-game/img/no-collision.png"/></li>
+          <li><img src="./assets/project-simple-game/img/no-collision-2.png"/></li>
+        </ul>
+        <figcaption>No collision</figcaption>
+      </figure>
+
+      <figure>
+        <img src="./assets/project-simple-game/img/collision.png"/>
+        <figcaption>Collision (cubes are intersecting)</figcaption>
+      </figure>
+
+      <h2 id="implementation-details">Implementation Details</h2>
+      <p>This project is implemented in pure
+        <a href="https://www.rust-lang.org">Rust</a>,
+      </p>
+
+      <p>
+        The source code can be viewed on
+        <a href="https://github.umn.edu/herma582/hw4-5607">GitHub</a>.
+        A zip file for Homework 4 can be
+        <a href="https://github.umn.edu/herma582/hw4-5607/archive/hw4.zip">downloaded here</a>.
+        An executable (compiled for Linux x86_64) can be
+        <a href="https://github.umn.edu/herma582/hw4-5607/raw/master/bin/hw4-5607">downloaded here</a>
+      </p>
+
+      <p>Automatically generated documentation (rustdocs) can also be found
+      <a href="rustdoc/hw4_5607/index.html">here</a>.</p>
+
+      <p>The following libraries (crates) were used:</p>
+      <ul>
+        <li> <a href="https://crates.io/crates/gl">gl</a> Graphics </li>
+        <li> <a href="https://crates.io/crates/glfw">glfw</a> Windowing and
+          input </li>
+        <li> <a href="https://crates.io/crates/glm">glm</a> Vector and matrix
+        mathematics </li>
+        <li> <a href="https://crates.io/crates/image">image</a> (Image
+          loading/saving) </li>
+        <li> <a href="https://crates.io/crates/num-traits">glm</a> Needed by
+          GLM to represent identity matrix and zero vectors </li>
+        <li> <a href="https://crates.io/crates/log">log</a> Logging interface </li>
+        <li> <a href="https://crates.io/crates/simple_logger">simple_logger</a>
+          Logging </li>
+      </ul>
+
+      <h2 id="video">Videos</h2>
+
+      <h3>5x5 Given Scene</h3>
+      <video src="./assets/project-simple-game/vid/simple.ogv" controls>
+        Sorry, the video won't work in your browser. Please
+        <a
+          href="https://github.umn.edu/herma582/hw4-5607/docs/assets/vid/simple.ogv">
+          download it here</a>,
+        and notify me (<code>herma582{at}umn{dot}edu</code>) so I can fix it
+        in the future.
+      </video>
+
+      <h3>10x10 Advanced Scene</h3>
+      <video src="./assets/project-simple-game/vid/advanced.ogv" controls>
+        Sorry, the video won't work in your browser. Please
+        <a
+          href="https://github.umn.edu/herma582/hw4-5607/docs/assets/vid/advanced.ogv">
+          download it here</a>,
+        and notify me (<code>herma582{at}umn{dot}edu</code>) so I can fix it
+        in the future.
+      </video>
+
+      <h2 id="images">Images</h2>
+      <figure class="nocount">
+        <img src="./assets/project-simple-game/img/multi-doors.png"/><figcaption>Multiple
+          colors for individual doors (A-E)</figcaption>
+      </figure>
+
+      <figure class="nocount">
+        <img src="./assets/project-simple-game/img/textures.png"/><figcaption>Individual
+          textures</figcaption>
+      </figure>
+
+      <figure class="nocount">
+        <img src="./assets/project-simple-game/img/custom-models.png"/><figcaption>Custom
+          model loading</figcaption>
+      </figure>
+
+      <figure class="nocount">
+        <img src="./assets/project-simple-game/img/phong-lighting.png"/><figcaption>Ambient,
+          diffuse, and Blinn-Phong specular lighting</figcaption>
+      </figure>
+    </body>
+  </article>
+</html>
