@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>deferred rendering | bridger</title>
+
+    <link rel="stylesheet"
+          href="https://bridger-herman.github.io/assets/css/figure.css">
+    <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+  </head>
+  <body>
+
+    <article>
+      <h1>Deferred Rendering</h1>
+
+      <h2>Group Members</h2>
+      <ul>
+        <li>Bridger Herman</li>
+        <li><a href="https://danielwbolson.com">Daniel Olson</a></li>
+      </ul>
+
+      <h2>Description</h2>
+      <p>
+      This project had two main goals: creating a hybrid Entity-Component /
+      Entity-Component-System engine, and displaying graphics with a
+      deferred rendering pipeline. The majority of this work was inspired
+      by <a href="https://liamtyler.com">Liam Tyler</a>'s work with his <a
+            href="https://github.com/LiamTyler/Progression">Progression</a>
+      engine.
+
+      This project was implemented in <a href="https://rustup.rs">Rust</a>.
+      </p>
+
+      <h2>Features</h2>
+      <ul>
+        <li>Hybrid EC/ECS engine</li>
+        <li>User camera control</li>
+        <li>3 rendering types:
+          <ol>
+            <li>Forward</li>
+            <li>Deferred</li>
+            <li>Deferred with light volumes</li>
+          </ol>
+        </li>
+      </ul>
+
+
+      <h2>Challenges</h2>
+      <p>
+      One of the largest challenges we encountered in this project was working
+      with globally static objects, such as the GLFW window, and the rendering
+      system. Rust is naturally memory-safe, which makes dealing with static
+      objects like this rather difficult. I ended up using macros to simplify
+      the interface into the engine's main components.
+      </p>
+
+      <p>
+      Another challenge was getting the resulting images from the three
+      rendering types to look similar. We ended up using some hacks to get the
+      lighting to look correct for each individual rendering model. We hope to
+      resolve in the near future.
+      </p>
+
+      <h2>Controls</h2>
+      <ul>
+        <li><strong>WASD/Mouse:</strong> Camera control</li>
+        <li><strong>r:</strong> Cycle rendering modes (forward, deferred,
+          deferred + light volumes)</li>
+      </ul>
+
+      <h2>Implementation Details</h2>
+
+      <p>
+      We loosely followed the Entity-Component-System architecture to
+      implement the engine.
+
+      <figure>
+        <img src="./assets/project-deferred/ecs_diagram.svg"
+        alt="Entity-Component-System diagram showing a cube and a monkey">
+        <figcaption>Example Entity-Component-System architecture, as
+          implemented for this project</figcaption>
+      </figure>
+      </p>
+
+      <p>
+      Once the basic ECS engine was in place, the next phase of the project
+      was creating a deferred rendering pipeline. Deferred rendering can be
+      desirable in situations where one has scenes with many lights. Deferred
+      can avoid excessive per-pixel light calculations, and light volumes can
+      help reduce the number of computations even further. Deferred rendering
+      works by saving scene information into textures &endash; referred to
+      here as the "G Buffer." The G Buffer contains textures for normals,
+      diffuse color, and specular.
+
+      <figure>
+        <img src="./assets/project-deferred/deferred_diagram.svg"
+        alt="Deferred rendering pipeline, comparing forward and deferred">
+        <figcaption>Simplified deferred rendering pipeline</figcaption>
+      </figure>
+      </p>
+
+      <p>
+      The last piece of this project was implementing light volumes. This
+      technique is an extension of deferred rendering. Each light has an
+      effective radius, which corresponds to the distance at which the light
+      intensity is below a small threshold.
+      <figure>
+        <img src="./assets/project-deferred/light_volumes.svg"
+        alt="Light volumes world">
+        <figcaption>Light volumes, showing effective radius and lit/unlit
+          objects</figcaption>
+      </figure>
+      </p>
+
+      <h2>Videos</h2>
+      <figure>
+        <iframe width="560" height="315"
+          src="https://www.youtube.com/embed/JIJb3VPppt8" frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope;
+        picture-in-picture" allowfullscreen></iframe>
+        <figcaption>Video showing (1) Forward rendering, (2) Deferred
+          rendering, and (3) Deferred rendered with light volumes</figcaption>
+      </figure>
+
+      <h2>Images</h2>
+      <figure>
+        <img src="./assets/project-deferred/menger-screenshot.png"
+        alt="Menger sponges with light volume rendering">
+        <figcaption>A 50x50 scene of Menger sponges, rendered with deferred +
+          light volumes</figcaption>
+      </figure>
+
+    </article>
+
+  </body>
+</html>
