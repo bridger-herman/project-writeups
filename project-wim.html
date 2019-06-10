@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>wim | bridger</title>
+
+    <link rel="stylesheet"
+          href="https://bridger-herman.github.io/assets/css/figure.css">
+    <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+  </head>
+  <body>
+
+    <article>
+      <h1>WIM: Worlds In Miniature</h1>
+
+      <h2>Group Members</h2>
+      <ul>
+        <li>Bridger Herman</li>
+        <li><a href="https://nkyllonen.github.io/">Nikki Kyllonen</a></li>
+      </ul>
+
+      <h2>Description</h2>
+      <p>
+      Prototype implementation of the interaction technique from the paper
+      <em>Virtual Reality on a WIM: Interactive Worlds in Miniature</em> (Richard
+      Stoakley, Matthew J. Conway, Randy Pausch).
+      </p>
+
+      <h2>Features</h2>
+      <ul>
+        <li>World in miniature attached to non-dominant hand's controller</li>
+        <li>Selection with dominant hand's controller</li>
+        <li>User avatar display on WIM (allows teleportation)</li>
+        <li>Virtual room with manipulable objects</li>
+        <li>Back face culling for easier WIM viewing</li>
+      </ul>
+
+      <h2>Challenges</h2>
+      <p>
+      The largest challenge we faced was enabling the user to teleport
+      around the scene by picking up their avatar on the WIM. We solved the
+      problem by searching for the SteamVR CameraRig object, and moving it
+      to the proper position with respect to the room (including adjusting
+      for the scale factor between the WIM and the full-size room).
+      </p>
+
+      <h2>Controls</h2>
+      <ul>
+        <li><strong>Non-Dominant-Hand Controller: </strong>Position the world in
+          miniature</li>
+        <li><strong>Dominant-Hand Controller: </strong>Select and manipulate
+          object in the virtual world and in the WIM</li>
+      </ul>
+
+      <h2>Code</h2>
+      <p>
+      Code from this project can be found in <a
+               href="https://github.umn.edu/herma582/WIM-8980">this GitHub repo</a>.
+
+         This project was implemented with Unity, and used the SteamVR plugin.
+      </p>
+
+      <h2>Images</h2>
+      <figure>
+        <img src="./assets/project-wim/wim-close-up.png" alt="WIM close-up">
+        <figcaption>Close up of the World in Miniature</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/project-wim/wim-close-up-selection.png" alt="Select
+        objects">
+        <figcaption>Select objects</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/project-wim/select-desk.png" alt="Manipulate
+        objects">
+        <figcaption>Manipulate objects</figcaption>
+      </figure>
+
+      <figure>
+        <img src="./assets/project-wim/teleport.png" alt="Start teleport">
+        <figcaption>Teleport by grabbing the blue user avatar</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/project-wim/teleport2.png" alt="End teleport">
+        <figcaption>User is now in a different location</figcaption>
+      </figure>
+    </article>
+
+  </body>
+</html>
