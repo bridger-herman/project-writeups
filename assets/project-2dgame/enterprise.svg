@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="69.362389mm"
+   height="37.11454mm"
+   viewBox="0 0 69.362387 37.11454"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="enterprise.svg"
+   inkscape:export-filename="C:\Users\scoot\dev\project-writeups\assets\project-2dgame\transform-explanation.png"
+   inkscape:export-xdpi="200"
+   inkscape:export-ydpi="200">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path902"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#42f0bc;fill-opacity:1;fill-rule:evenodd;stroke:#42f0bc;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6104">
+      <stop
+         style="stop-color:#fdfdfd;stop-opacity:1"
+         offset="0"
+         id="stop6100" />
+      <stop
+         style="stop-color:#fbfbfb;stop-opacity:0"
+         offset="1"
+         id="stop6102" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5994">
+      <stop
+         style="stop-color:#fc9f9f;stop-opacity:1"
+         offset="0"
+         id="stop5990" />
+      <stop
+         style="stop-color:#ff1f1f;stop-opacity:1"
+         offset="1"
+         id="stop5992" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5994"
+       id="linearGradient6000"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.78497702,0,0,1.0012951,-29.66988,-0.67724443)"
+       x1="-65.36084"
+       y1="120.78912"
+       x2="-65.36084"
+       y2="122.67671" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6104"
+       id="linearGradient6106"
+       x1="133.62808"
+       y1="73.417351"
+       x2="141.78983"
+       y2="73.417351"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.69054429,0,0,0.56017827,42.614821,32.290544)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5994"
+       id="linearGradient6122"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.78497702,0,0,1.0012951,-29.66988,-0.67724443)"
+       x1="-65.36084"
+       y1="120.78912"
+       x2="-65.36084"
+       y2="122.67671" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6104"
+       id="linearGradient6140"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.69054429,0,0,0.56017827,42.085654,32.47188)"
+       x1="133.62808"
+       y1="73.417351"
+       x2="141.78983"
+       y2="73.417351" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.6521068"
+     inkscape:cx="134.40436"
+     inkscape:cy="73.959652"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-global="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1373"
+     inkscape:window-x="-9"
+     inkscape:window-y="335"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-106.53802,-53.473474)">
+    <rect
+       y="-34.055618"
+       x="126.71956"
+       height="0.96735436"
+       width="8.741847"
+       id="rect6014"
+       style="fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.09372091;stroke-opacity:1"
+       ry="0.37571186"
+       transform="rotate(45)"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <rect
+       transform="rotate(-45)"
+       ry="0.37571186"
+       style="fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.09372091;stroke-opacity:1"
+       id="rect6042"
+       width="8.741847"
+       height="0.96735436"
+       x="23.115608"
+       y="136.69221"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <rect
+       style="fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.17454459;stroke-opacity:1"
+       id="rect821"
+       width="7.6018643"
+       height="3.8584111"
+       x="118.46392"
+       y="71.443192"
+       ry="1.7469625"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <circle
+       style="opacity:1;vector-effect:none;fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.19066748;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path6802"
+       cx="134.41086"
+       cy="73.372398"
+       r="9.8608656"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <g
+       id="g6004"
+       transform="matrix(0.99795201,0,0,1.4390625,0.61805531,-35.56243)"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200">
+      <rect
+         y="80.179108"
+         x="106.21651"
+         height="1.6343452"
+         width="14.769349"
+         id="rect5996"
+         style="fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.15834147;stroke-opacity:1"
+         ry="0.63476515" />
+      <path
+         style="fill:url(#linearGradient6000);fill-opacity:1;stroke:#e62727;stroke-width:0.17731258;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path5998"
+         sodipodi:type="arc"
+         sodipodi:cx="-80.996277"
+         sodipodi:cy="120.60205"
+         sodipodi:rx="0.79395986"
+         sodipodi:ry="1.2059286"
+         sodipodi:start="0"
+         sodipodi:end="3.1415927"
+         d="m -80.202317,120.60205 a 0.79395986,1.2059286 0 0 1 -0.39698,1.04437 0.79395986,1.2059286 0 0 1 -0.79396,0 0.79395986,1.2059286 0 0 1 -0.39698,-1.04437 l 0.79396,0 z"
+         transform="rotate(-90)" />
+    </g>
+    <ellipse
+       style="fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.36149043;stroke-opacity:1"
+       id="path819"
+       cx="133.8817"
+       cy="73.372398"
+       rx="10.583356"
+       ry="10.583357" />
+    <path
+       style="fill:url(#linearGradient6140);fill-opacity:1;stroke:none;stroke-width:0.16455889px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 134.36176,73.552832 5.63604,-4.362426 v 8.816553 z"
+       id="path6098"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;stroke:none;stroke-width:0.31396794px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 136.71772,78.442708 c 2.509,-2.89978 2.89139,-6.301513 0,-9.898308"
+       id="path6080"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path6082"
+       d="m 139.24945,76.907814 c 1.40735,-2.055485 1.76466,-4.275682 0,-6.828737"
+       style="fill:none;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <circle
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.46394378;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path6094"
+       cx="133.8817"
+       cy="73.372398"
+       r="7.8335757"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:#8f8f8f;fill-opacity:1;stroke:#545454;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 129.8539,71.654105 c -0.46997,1.146955 -0.58744,2.304278 0,3.482333 1.54273,0.400886 3.10185,0.703484 4.82864,0 0,0 1.43404,-1.055055 1.43949,-1.708206 0.006,-0.672296 -1.43814,-1.774529 -1.43814,-1.774529 -1.37957,-0.511922 -2.89276,-0.726919 -4.82999,4.02e-4 z"
+       id="path6065"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccscc"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <g
+       transform="matrix(0.99795201,0,0,1.4390625,0.65827121,-50.810156)"
+       id="g6120"
+       inkscape:export-filename="/home/bridger/dev/8980-balloon/assets/img/enterprise.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200">
+      <rect
+         ry="0.63476515"
+         style="fill:#b2b2b2;fill-opacity:1;stroke:#545454;stroke-width:0.15834147;stroke-opacity:1"
+         id="rect6116"
+         width="14.769349"
+         height="1.6343452"
+         x="106.21651"
+         y="80.179108" />
+      <path
+         transform="rotate(-90)"
+         d="m -80.202317,120.60205 a 0.79395986,1.2059286 0 0 1 -0.39698,1.04437 0.79395986,1.2059286 0 0 1 -0.79396,0 0.79395986,1.2059286 0 0 1 -0.39698,-1.04437 l 0.79396,0 z"
+         sodipodi:end="3.1415927"
+         sodipodi:start="0"
+         sodipodi:ry="1.2059286"
+         sodipodi:rx="0.79395986"
+         sodipodi:cy="120.60205"
+         sodipodi:cx="-80.996277"
+         sodipodi:type="arc"
+         id="path6118"
+         style="fill:url(#linearGradient6122);fill-opacity:1;stroke:#e62727;stroke-width:0.17731258;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.17499995px;line-height:1.25;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="148.32234"
+       y="80.356209"
+       id="text853"><tspan
+         sodipodi:role="line"
+         id="tspan851"
+         x="148.32234"
+         y="80.356209"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.17499995px;line-height:1.25;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;vector-effect:none;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">Pivot Point</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="149.04623"
+       y="70.86525"
+       id="text857"><tspan
+         sodipodi:role="line"
+         id="tspan855"
+         x="149.04623"
+         y="70.86525"
+         style="font-size:3.17499995px;fill:#eeeeee;fill-opacity:1;stroke-width:0.26458332">Photon Launcher</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.17499995px;line-height:1.25;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="125.4395"
+       y="89.927589"
+       id="text877"><tspan
+         sodipodi:role="line"
+         id="tspan875"
+         x="125.4395"
+         y="89.927589"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.17499995px;line-height:1.25;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;vector-effect:none;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">Ship</tspan></text>
+    <path
+       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 123.46891,73.64015 4.86613,13.029951"
+       id="path885"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 134.0457,73.599934 c 0.16086,-0.08043 22.27961,3.941158 22.27961,3.941158"
+       id="path887"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#eeeeee;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 139.03247,67.286037 9.6116,2.493386"
+       id="path889"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g1369">
+      <circle
+         style="opacity:1;vector-effect:none;fill:#47f0bd;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="circle847"
+         cx="123.38848"
+         cy="73.358643"
+         r="1.1260451" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path891"
+         d="m 123.58956,73.358643 h 7.078"
+         style="fill:none;stroke:#42f0bc;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+    </g>
+    <g
+       id="g1375"
+       transform="translate(10.657214)">
+      <circle
+         r="1.1260451"
+         cy="73.358643"
+         cx="123.38848"
+         id="circle1371"
+         style="opacity:1;vector-effect:none;fill:#47f0bd;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         style="fill:none;stroke:#42f0bc;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+         d="m 123.58956,73.358643 h 7.078"
+         id="path1373"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
+       transform="rotate(-50.04582,125.05713,53.701716)"
+       id="g1381">
+      <circle
+         style="opacity:1;vector-effect:none;fill:#47f0bd;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="circle1377"
+         cx="123.38848"
+         cy="73.358643"
+         r="1.1260451" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1379"
+         d="m 123.58956,73.358643 h 7.078"
+         style="fill:none;stroke:#42f0bc;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+    </g>
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#bebebe;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 148.3466,58.446623 -1.48799,-4.584613 4.02159,3.297704 -1.12605,0.361944 1.04561,1.407556 -0.5228,0.402159 -1.08583,-1.487988 z"
+       id="path1383"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <text
+       id="text1387"
+       y="56.692593"
+       x="152.23897"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.17499995px;line-height:1.25;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.17499995px;line-height:1.25;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;vector-effect:none;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         y="56.692593"
+         x="152.23897"
+         id="tspan1385"
+         sodipodi:role="line">Mouse Pointer</tspan></text>
+    <text
+       id="text1454"
+       y="70.86525"
+       x="149.04623"
+       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="font-size:3.17499995px;fill:#eeeeee;fill-opacity:1;stroke-width:0.26458332"
+         y="70.86525"
+         x="149.04623"
+         id="tspan1452"
+         sodipodi:role="line">Photon Launcher</tspan></text>
+  </g>
+</svg>

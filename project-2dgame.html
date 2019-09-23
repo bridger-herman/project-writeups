@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>2d game | bridger</title>
+
+    <link rel="stylesheet"
+          href="https://bridger-herman.github.io/assets/css/figure.css">
+    <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+  </head>
+  <body>
+
+    <article>
+      <h1>Project 1: Simple Game</h1>
+
+      <h2>Gameplay / Game Design</h2>
+
+      <p>
+        This game is vaguely based on a balloon-tap style game, where the goal
+        is to pop the balloons that appear on the screen. I chose a Star Trek
+        theme for the game, where the player is the <em>Enterprise</em>, and the
+        "balloons" are Borg Cubes. The user clicks the destination for the
+        <em>Enterprise</em>, and it follows a Bezier curve to get to its
+        destination. The user presses space to fire photon torpedoes at the Borg
+        ships. The game is implemented in <a href="https://p5js.org">p5.js</a>.
+      </p>
+
+      <p>
+        This game is designed as a free-for-all style game, where you have
+        unlimited photon torpedoes, and the Borg ships don't shoot back at the
+        player's ship. One nice thing to make gameplay more fun could be to add
+        a level manager so different enemies could spawn with different tactics.
+      </p>
+
+      <figure>
+        <img src="./assets/project-2dgame/overview.png" alt="Project overview
+        with Enterprise, photon torpedoes, and Borg ships">
+        <figcaption>Project overview showing ships and photon torpedoes</figcaption>
+      </figure>
+
+      <h2>Algorithmic Discussion</h2>
+
+      <h3>Features:</h3>
+
+      <ul>
+        <li>Simple Entity-Component architecture</li>
+        <li>Smooth player movement based on Bezier curves</li>
+        <li>Transform hierarchy</li>
+        <li>Timing system</li>
+        <li>Simple collision system</li>
+        <li>Damage system</li>
+      </ul>
+
+      <p>
+        The two key algorithmic portions of this game were Bezier curves for
+        smooth player movement, and transform parents.
+      </p>
+
+      <p>
+        De Casteljau's algorithm was used to find points along a cubic Bezier
+        curve. The first and last control points are the current position, and
+        the mouse click location, respectively. The second point in the curve is
+        a set distance in front of the ship's current position along the ship's
+        current heading, to give the illusion of the ship having a "turning
+        radius." The third point is two-thirds along the way between the initial
+        ship position and the mouse click, plus an offset in the direction
+        orthogonal to the vector between those points.
+      </p>
+
+      <figure>
+        <img src="./assets/project-2dgame/bezier-explanation.png" alt="Bezier
+        curve with control points and vertices resulting from De Casteljau's Algorithm">
+        <figcaption>Bezier curve with control points and vertices resulting
+        from De Casteljau's Algorithm</figcaption>
+      </figure>
+
+      <figure>
+        <img src="./assets/project-2dgame/bezier-pic.png">
+        <figcaption>Bezier curve with control points shown in game</figcaption>
+      </figure>
+
+      <p>
+        Initially, I didn't believe that it was going to be necessary to create
+        my own transform class. However, p5.js does not support matrices, so I
+        ended up creating my own transform mechanism that uses a hybrid of my
+        own <code>Matrix3x3</code>s and <code>p5.Vector</code>s. This transform
+        mechanism supports transform parents, which enable the ship to have a
+        photon torpedo launcher "mounted" on it. I implemented my own naive
+        matrix multiplication, and global transform application. One thing I
+        wasted a lot of time on for this particular problem was the fact that in
+        2D, p5 uses <strong>clockwise</strong> rotations, and my code was trying
+        to use counterclockwise ones.
+      </p>
+
+      <figure>
+        <img src="./assets/project-2dgame/transform-explanation.png">
+        <figcaption>Transform hierarchy: Ship > Pivot Point > Photon Launcher</figcaption>
+      </figure>
+
+      <p>
+        Additionally, a simple health/damage system was created for dealing
+        damage to enemy ships from photon torpedoes. The damage system alters
+        the rendered image of the Borg cube according to how much damage has
+        been dealt to it:
+      </p>
+
+      <ul class="tiled-list">
+        <li><img src="./assets/project-2dgame/borg3.jpg"> 100% Health</li>
+        <li><img src="./assets/project-2dgame/borg3_damage1.jpg"> 75% Health</li>
+        <li><img src="./assets/project-2dgame/borg3_damage2.jpg"> 50% Health</li>
+        <li><img src="./assets/project-2dgame/borg3_damage3.jpg"> 25% Health</li>
+      </ul>
+
+      <p>
+        One of the current bottlenecks is definitely object collision. Currently
+        there is an O(n^2) algorithm in place for checking collisions between
+        photon torpedoes and Borg ships. Performance on collisions could be
+        drastically improved by using a spatial data structure.
+      </p>
+
+      <h2>Game Engine Analysis</h2>
+
+      <p>
+        It would have been incredibly helpful if p5 had native support for
+        matrices and transformations. However, I will say that it was incredibly
+        useful to learn about the process of applying transform parents, and all
+        the things that can go wrong during that process.
+      </p>
+
+      <p>
+        Key components in my p5-based 2D rendering engine were inspired by
+        the Unity game engine, and include an Entity-Component architecture,
+        several systems for managing game state, and the transform hierarchy.
+      </p>
+
+      <p>
+        The developer creates <code>GameObject</code>s, which each have
+        <code>component</code>s. Each component is a short segment of code
+        which specifies behaviors that each object should have. For example,
+        the <em>Enterprise</em> has a <code>FollowMouseBehaviour</code>
+        component, which tells the ship to follow an interpolated Bezier
+        spline to the location where the user has clicked, and the photon
+        torpedo launcher has a <code>RotateToMouse</code> component, which
+        makes sure the photon torpedoes are always launched in the direction
+        of the mouse. The static <code>GameObjectManager</code> keeps track
+        of all active game objects, and handles all game object instantiation
+        and destruction. All game objects and components have access to the
+        <code>GameObjectManager</code>, which enables them to directly
+        interact with other game objects (as is necessary in the case of
+        photon torpedo and Borg interaction).
+      </p>
+
+      <h2>Code</h2>
+      <p>
+      Code from this project can be found in <a
+               href="https://github.umn.edu/herma582/8980-balloon">this GitHub repo</a>.
+
+         This project was implemented with p5.js.
+      </p>
+
+      <h2>Video</h2>
+      <video src="./assets/project-2dgame/balloon-video.mp4" width="800px"></video>
+    </article>
+
+  </body>
+</html>
