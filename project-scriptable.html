@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>scriptable game | bridger</title>
+
+        <link rel="stylesheet"
+              href="https://bridger-herman.github.io/assets/css/figure.css">
+        <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+    </head>
+    <body>
+
+        <article>
+            <h1>CSCI 8980 Project 3: Scriptable Game Engine</h1>
+
+            <a href="https://bridger-herman.github.io/scriptable-game/">Play The
+                Game!</a>
+
+            <h2>Gameplay / Game Design</h2>
+
+            <p>
+            The game is based on a version of Sudoku - Colorku - where
+            each number is represented by a physical colored token. The
+            rules of Colorku are similar to Sudoku, in that there may only
+            be one piece of each color per row, per column, and per 3x3
+            box. The game disallows illegal moves by bouncing the tokens
+            upward away from the board.
+            </p>
+
+            <p>
+            Moves are made by clicking the mouse on 9x9 grid locations.
+            The color of the current token is highlighted below the view
+            of the game board, and the current color token can be changed
+            by clicking the button for that particular color. Different
+            boards can be loaded with JavaScript.
+            </p>
+
+            <figure>
+                <img src="./assets/project-scriptable-game/overview.png">
+                <figcaption>The game's main interface</figcaption>
+            </figure>
+
+
+            <h2>Animation: Design and Implementation</h2>
+
+            <h3>Design</h3>
+
+            <p>
+            There are three main instances where animation is used in the
+            game:
+            <p>
+
+            <ul>
+                <li>Placing a token</li>
+                <li>Rejecting a token</li>
+                <li>Winning</li>
+            </ul>
+
+            <h4>Placing a token</h4>
+            <p>
+            When the user clicks the mouse on a valid board location, the
+            new token of the correct color stretches and flies into the
+            scene. The token first stretches in the Z direction, flies to
+            the target location, then squashes into place on the board.
+            </p>
+            <figure>
+                <img src="./assets/project-scriptable-game/place.gif">
+                <figcaption>Placing a valid token</figcaption>
+            </figure>
+
+            <h4>Rejecting a token</h4>
+            <p>
+            The animation for clicking on an invalid location is similar
+            to that of the valid location, but instead of moving into
+            place on the board, the token comes into view and is reflected
+            away.
+            </p>
+            <figure>
+                <img src="./assets/project-scriptable-game/bounce.gif">
+                <figcaption>Placing an invalid token (rejection)</figcaption>
+            </figure>
+
+            <h4>Winning</h4>
+            <p>
+            The last animation is a 2D text spinning animation that is
+            triggered when the game is complete.
+            </p>
+            <figure>
+                <img src="./assets/project-scriptable-game/win.gif">
+                <figcaption>Winning the game</figcaption>
+            </figure>
+
+            <h3>Implementation</h3>
+
+            <h4>Token Animations</h4>
+
+            <p>
+            Both token animations are accomplished with a series of
+            keyframes. The keyframes are set dynamically via JavaScript
+            components on each token's entity. Keyframes have a <em>t</em>
+            value, and a transform at that <em>t</em>. GLM's
+            <code>mix</code> function is used to interpolate vectors.
+            Keyframes are stored as JavaScript objects. For
+            example, a square can be transformed over a finite amount of
+            time, with the following keyframes:
+            <pre>
+let keyframes = {
+    0.0: Transform.identity(),
+    0.5: Transform.trs(
+        glm.vec3(0.5, 0.4, 0.0),
+        glm.vec3(0.0, 0.0, 45.0),
+        glm.vec3(1.0, 0.3, 1.0),
+    ),
+    1.0: Transform.trs(
+        glm.vec3(0.3, 0.9, 0.0),
+        glm.vec3(0.0, 0.0, 25.0),
+        glm.vec3(1.0, 1.0, 1.0),
+    ),
+};
+            </pre>
+            </p>
+            <figure>
+                <img src="./assets/project-scriptable-game/basic-keyframes.png">
+                <figcaption>Square transformation defined by
+                    <code>keyframes</code> object above</figcaption>
+            </figure>
+
+            <h4>Winning Animation</h4>
+
+            <p>
+            The winning animation is a simple CSS transformation, applied
+            over 2 seconds:
+            <pre>
+#win-text {
+    /* ... */
+    animation: spin 2s;
+}
+@keyframes spin {
+    from {transform: rotate(359.0deg);}
+    to {transform: rotate(0.0deg);}
+}
+            </pre>
+            </p>
+
+            <h2>Game and Engine Details</h2>
+
+            <figure>
+                <video src="./assets/project-scriptable-game/time-lapse.ogv" width="800px"
+                                                                             controls></video>
+                <figcaption>Time lapse of gameplay</figcaption>
+            </figure>
+            <figure>
+                <video src="./assets/project-scriptable-game/end.ogv" width="800px"
+                                                                             controls></video>
+                <figcaption>The last few seconds of a game</figcaption>
+            </figure>
+
+            <h3>Design</h3>
+            <p>
+            The game does its best to stay faithful to the original 
+            <a href="http://colorku.com/">Colorku</a>, which in turn follows
+            Sudoku rules. There must be only one instance of each color in
+            row, column, and 3x3 box. The winning state is achieved when all
+            rows and columns have been filled, and none of the aforementioned
+            conditions have been violated.
+            </p>
+
+            <p>
+            Features that are included in this implementation that aren't
+            in the original:
+
+            <ul>
+                <li>Lively animations</li>
+                <li>Disallowing illegal moves</li>
+                <li>Spinning winning text</li>
+            </ul>
+            </p>
+
+            <h3>Implementation</h3>
+            <p>
+            For this assignment, I created a (mostly proof-of-concept)
+            rendering system for WebAssembly, with an integrated
+            JavaScript scripting interface. At a high level, the engine
+            works according to the following table and diagram:
+            </p>
+
+            <h4>JS and Wasm Setup Responsibilities</h4>
+            <table border="1">
+                <tr>
+                    <th>WebAssembly</th>
+                    <th>JS</th>
+                </tr>
+                <tr>
+                    <td>Compile shaders</td>
+                    <td>Load scene from JSON</td>
+                </tr>
+                <tr>
+                    <td>Break down obj files into components for WebGL</td>
+                    <td>Load all obj meshes from scene</td>
+                </tr>
+                <tr>
+                    <td>Initialize VAOs and VBOs for meshes</td>
+                    <td>Initialize transforms</td>
+                </tr>
+                <tr>
+                    <td>Initialize rendering system</td>
+                    <td>Initialize scripts and register them with Wasm</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Call <code>start()</code> for each script</td>
+                </tr>
+            </table>
+
+            <p>
+            During the setup process, a scene is loaded asynchronously
+            from the server. Scenes define prefab objects that can be
+            used throughout the scene. Each prefab can have a mesh
+            associated with it, and must have at least one script attached
+            to it. Scripts are attached to prefabs using their class names
+            as strings. Scenes then provide a list of entities in the
+            scene, which are identified by their prefab, color, and
+            transform.
+            </p>
+
+            <p>
+            The scene manager instructs the WebAssembly engine to create
+            entities for those it finds in the scene file, and attaches
+            scripts and transforms to the entities accordingly.
+            </p>
+
+
+            <h4>JS and Wasm Per-Frame Responsibilities</h4>
+
+            <figure>
+                <img src="./assets/project-scriptable-game/update-pipeline.png">
+                <figcaption>The update pipeline between WebAssembly and
+                    JavaScript</figcaption>
+            </figure>
+
+            <p>
+            The WebAssembly code triggers a timer interrupt at a frequency set by
+            the user (the target frame rate, set via
+            <code>setInterval</code>). Each frame, the WebAssembly updates
+            the browser tab title with the current <em>dt</em>, then
+            proceeds to call the update function for each of the scripts.
+            WebAssembly has the capability to call JavaScript functions
+            and methods directly, which I utilized by creating one base
+            class (<code>WreScript</code>, a similar concept to Unity's
+            <code>MonoBehaviour</code>). Each user script inherits from
+            <code>WreScript</code>, and must define <code>start()</code>
+            and <code>update()</code> methods. For example, the
+            <code>start()</code> method in the <code>WreScript</code>
+            derivative <code>BoardManager</code> takes care of
+            programmatically instantiating all of the tokens from a
+            particular puzzle onto the board.
+            </p>
+
+            <h2>Technical Challenges</h2>
+
+            <p>
+            The most difficult and time consuming part of the project was
+            correctly passing data and control between the WebAssembly and
+            the JavaScript sides. There are several parts of the engine
+            that are quite hacked-together at the moment, and are likely
+            quite slow (no benchmarks have been run as yet).
+            </p>
+
+            <p>
+            If given a few more weeks to work on this, I would like to
+            polish the interface between the JS and Wasm (particularly in
+            regards to managing each entity's transform). Additionally, I
+            would like to support rendering features expected of any
+            engine, such as textures, normal maps, and more realistic
+            lighting.
+            </p>
+
+            <h2>Code</h2>
+            <p>
+            Code from this project can be found in
+            <a href="https://github.com/bridger-herman/scriptable-game">this GitHub repo</a>.
+            </p>
+
+            <p>The following Rust (WebAssembly) libraries were used:</p>
+            <ul>
+                <li>js-sys: moving objects between JS and Rust</li>
+                <li>web-sys: interacting with the browser from Rust</li>
+                <li>wasm-logger: console log from Wasm</li>
+                <li>serde: object serialization and deserialization</li>
+                <li>lazy_static: state management</li>
+                <li>instant: hack because <code>std::time::Instant::now</code>
+                    doesn't work in Wasm)</li>
+                <li>obj: parsing obj files</li>
+            </ul>
+
+            <p>The following JavaScript libraries were used:</p>
+            <ul>
+                <li>jQuery: generally making life easier</li>
+                <li>glm: vector and matrix math</li>
+            </ul>
+        </article>
+
+    </body>
+</html>
