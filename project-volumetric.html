@@ -14,8 +14,9 @@
         <article>
             <h1>CSCI 8980 Final Project: Volumetric Lighting</h1>
 
-            <a href="https://bridger-herman.github.io/scriptable-game/">Play The
-                Game!</a>
+            <a
+                href="https://bridger-herman.github.io/volumetric-lighting/">View
+                the Demo!</a>
 
             <h2>Features</h2>
             <h3>Volumetric Lighting</h3>
@@ -28,6 +29,12 @@
             the scene's shadow map to draw rays from the light sources to all
             the places in the scene that aren't in shadow.
             </p>
+
+            <figure>
+                <img src="./assets/project-volumetric/overview.png" alt="">
+                <figcaption>Example scene with artist-driven volumetric
+                    lighting</figcaption>
+            </figure>
 
             <p>
             For the volumetric lighting in this project, I use an
@@ -139,13 +146,52 @@ t1 = clamp(t1, 0.0, frag_depth);
 t2 = clamp(t2, 0.0, frag_depth);
 </code></pre>
 
+            <h3>Fog</h3>
+            <p>
+            As an afterthought, I also implemented fog, using the simplistic
+            model used in class:
+            </p>
+
+<pre><code class="language-glsl">float fog_intensity = exp(-uni_fog_density * length(eye_to_pos));
+final_color = vec4(mix(uni_fog_color, final_color.xyz, fog_intensity), 1.0);
+</code></pre>
+
+            <p>
+            With low densities and in smaller scenes like the chamber in the
+            figure below, the effects are quite subtle. However, when the
+            density is increased or there's more open space, the effects of
+            the fog become quite pronounced.
+            </p>
+
+            <figure>
+                <span>
+                    <img style="width: 49%" src="./assets/project-volumetric/fog_closed_low.png" alt="">
+                    <img style="width: 49%" src="./assets/project-volumetric/fog_closed_hi.png" alt="">
+                </span>
+                <figcaption>Enclosed scene with low fog density (left), and
+                    higher density (right)</figcaption>
+                <span>
+                    <img style="width: 49%" src="./assets/project-volumetric/fog_open_low.png" alt="">
+                    <img style="width: 49%" src="./assets/project-volumetric/fog_open_hi.png" alt="">
+                </span>
+                <figcaption>Open scene with low fog density (left), and
+                    higher density (right)</figcaption>
+            </figure>
+
+            <figure>
+                <img src="./assets/project-volumetric/overview.gif" alt="">
+                <figcaption>Simple test scene, showing the ability for the
+                    volumetric lights to move, and for the fog parameters to
+                    be dynamically adjusted.</figcaption>
+            </figure>
+
 
             <h2>Design and Implementation</h2>
 
             <p>
             For this assignment, I extended my browser-based WebAssembly
             rendering engine (WRE), which incorporates a JavaScript scripting
-            interface. 
+            interface.
             </p>
 
             <h3>Design</h3>
@@ -208,6 +254,14 @@ export class Mover extends WreScript {
                     volumetric lighting effects (images &copy; 1991 Paramount
                     Pictures)</figcaption>
             </figure>
+
+            <figure>
+                <video src="./assets/project-volumetric/chamber.ogv" controls></video>
+                <figcaption>Recreation of the scene from <em>Star Trek
+                        VI</em></figcaption>
+            </figure>
+
+
 
             <h3>Implementation</h3>
             <p>
