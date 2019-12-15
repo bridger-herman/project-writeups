@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>volumetric lighting | bridger</title>
+
+        <link rel="stylesheet"
+              href="https://bridger-herman.github.io/assets/css/figure.css">
+        <link rel="stylesheet" href="https://bridger-herman.github.io/assets/css/index.css">
+        <link href="./assets/prism/prism.css" rel="stylesheet" />
+    </head>
+    <body>
+
+        <article>
+            <h1>CSCI 8980 Final Project: Volumetric Lighting</h1>
+
+            <a href="https://bridger-herman.github.io/scriptable-game/">Play The
+                Game!</a>
+
+            <h2>Features</h2>
+            <h3>Volumetric Lighting</h3>
+
+            <p>
+            Volumetric lighting is an effect that is commonly used in games to
+            mimic particulate matter in the atmosphere reacting to a light
+            source. This technique is usually broken out into two subclasses -
+            artist-driven, and automatic. Automatic volumetric lighting uses
+            the scene's shadow map to draw rays from the light sources to all
+            the places in the scene that aren't in shadow.
+            </p>
+
+            <p>
+            For the volumetric lighting in this project, I use an
+            artist-driven approach, where each light and halo must be placed
+            individually, according to some artistic vision. While this may
+            not necessarily lead to the most physically realistic results, it
+            can certainly add to the dramatic effect of a game. In the scene
+            file (implementation details below), the artist can specify point
+            and spot lights, and individually control the volumetric effects
+            of each light. For instance:
+            </p>
+
+<pre><code class="language-json">{
+    "point_lights": [
+        {
+            "color": [1.5, 1.5, 2.0],
+            "position": [0.0, 1.0, 0.0],
+            "halo_intensity": 0.0
+        },
+        {
+            "color": [7.0, 4.0, 3.0],
+            "position": [-4.0, 4.0, 0.0],
+            "halo_intensity": 0.0
+        }
+    ],
+    "spot_lights": [
+        {
+            "color": [0.5, 0.5, 1.1],
+            "position": [0, 1.5, 0],
+            "direction": [0, -1, 0],
+            "angle_inside": 45.0,
+            "angle_outside": 48.0,
+            "halo_intensity": 0.2
+        }
+    ],
+}
+</code></pre>
+
+            <p>
+            For each type of volumetric halo, a ray is traced from the eye
+            through the current fragment on the near plane of the camera.
+            Volumetric lighting is implemented as a post-processing effect, so
+            it requires a multi-pass approach. First, the scene is rendered
+            using forward rendering and the colors and world positions of each
+            fragment are saved, then the volumetric shader is applied to those
+            fragments. The fragments affected by each halo are summed up and
+            added with the fragment's original color, which gives the final
+            color for each pixel.
+            </p>
+
+            <figure>
+                <img src="./assets/project-volumetric/halo_diagram.png" alt="">
+                <figcaption>Top-down view of ray-geometry intersections for
+                    sphere and cylinder halos</figcaption>
+            </figure>
+
+            <h3>Point Light Halos</h3>
+            <p>
+            The halos around point light sources are approximated with spheres
+            of constant density. A ray-sphere intersection test is performed
+            using the geometric definition of a sphere:
+            </p>
+
+<pre><code class="language-glsl">// Solve the quadratic to see if ray intersects sphere
+vec3 start_to_center = ray_start - sphere_center;
+float a = dot(ray_dir, ray_dir);
+float b = 2.0 * dot(ray_dir, start_to_center);
+float c = dot(start_to_center, start_to_center) - effective_radius *
+    effective_radius;
+
+float discriminant = b * b - 4.0 * a * c;
+discriminant = max(discriminant, 0.0);
+
+// Calculate the intersection t values and points
+float sqrt_disc = sqrt(discriminant);
+float t1 = (-b + sqrt_disc) / (2.0 * a);
+float t2 = (-b - sqrt_disc) / (2.0 * a);
+t1 = clamp(t1, 0.0, frag_depth);
+t2 = clamp(t2, 0.0, frag_depth);
+</code></pre>
+
+            <h3>Spot Light Halos</h3>
+            <p>
+            The halos on spotlights are approximated using infinite cylinders,
+            which are defined with a point to pass through, a direction, and a
+            radius. A ray-cylinder intersection test is performed (taking
+            heavy inspiration from
+            <a
+                href="http://www.iquilezles.org/www/articles/intersectors/intersectors.htm">this
+                article on ray-cylinder intersections</a>.
+            </p>
+
+<pre><code class="language-glsl">vec3 eye_to_cyl = ray_start - cyl_point;
+float cyl_ray = dot(cyl_dir, ray_dir);
+float cyl_eye = dot(cyl_dir, eye_to_cyl);
+
+float a = 1.0 - cyl_ray * cyl_ray;
+float b = dot(eye_to_cyl, ray_dir) - cyl_eye * cyl_ray;
+float c = dot(eye_to_cyl, eye_to_cyl) - cyl_eye * cyl_eye - effective_radius *
+            effective_radius;
+
+float h = b * b - a * c;
+h = clamp(h, 0.0, frag_depth);
+
+float h2 = sqrt(h);
+float t1 = (-b - h2) / a;
+float t2 = (-b + h2) / a;
+t1 = clamp(t1, 0.0, frag_depth);
+t2 = clamp(t2, 0.0, frag_depth);
+</code></pre>
+
+
+            <h2>Design and Implementation</h2>
+
+            <p>
+            For this assignment, I extended my browser-based WebAssembly
+            rendering engine (WRE), which incorporates a JavaScript scripting
+            interface. 
+            </p>
+
+            <h3>Design</h3>
+
+            <h4>Engine Design</h4>
+            <p>
+            The engine interface is loosely inspired by both Unity's scripting
+            interface, and
+            <a
+                href="https://github.umn.edu/sjguy/GEFS-CSCI8980-Fall2019">Stephen
+                J. Guy's GEFS</a>
+            lua scripting interface. My engine allows for both
+            "engine-centric" scripting calls, and "entity-centric" scripts. We
+            inherit from the provided <code>WreScript</code> to add behaviours
+            to entities.  For instance, the following will create another
+            entity, and set its position to the current entity's position
+            during every frame:
+            </p>
+<pre><code class="language-javascript">import * as wre from '../pkg/wre_wasm.js';
+import { WreScript } from '../wre.js';
+
+// Entity-Centric script, start() is called once when the scene is loaded, and
+// update() is called every frame
+export class Mover extends WreScript {
+    start() {
+        // Engine-Centric call to create an entity
+        // Implementation detail: we refer to entities by their EID because
+        // it's less work than passing around the whole entity.
+        this._follower_eid = wre.create_entity();
+    }
+
+    update() {
+        let e = wre.get_entity(this._follower_eid);
+
+        e.transform.position = this.transform.position;
+
+        // This is necessary because we "borrowed" an immutable copy with
+        // `get_entity`. wasm-bindgen doesn't support mutable references yet
+        wre.set_entity(this._follower_eid, e);
+    }
+}
+</code></pre>
+
+            <h3>Scene Design</h3>
+            <p>
+            I spent quite a while pondering what scenes I could use to
+            showcase the capabilities of my volumetric lighting, and I
+            happened upon the famous scene from <em>Star Trek VI, The
+                Undiscovered Country</em> where Kirk and Bones are on trial
+            with the Klingons. There's a great volumetric halo for the spot
+            light, and an overall dramatic atmosphere. The scene was modeled
+            from scratch in Blender using the reference images in the figure
+            below.
+            </p>
+
+            <figure>
+                <img src="./assets/project-volumetric/cut1.gif" alt="">
+                <img src="./assets/project-volumetric/cut2.gif" alt="">
+                <figcaption>Scene in <em>Star Trek VI</em> with nice
+                    volumetric lighting effects (images &copy; 1991 Paramount
+                    Pictures)</figcaption>
+            </figure>
+
+            <h3>Implementation</h3>
+            <p>
+            Several improvements have been made to the engine since previous
+            iterations, namely:
+            </p>
+
+            <h4>Better management of resource loading</h4>
+            <p>
+            Since all of this code runs in a web browser, nothing can be
+            directly fetched from disk; it must be requested from the server
+            via HTTP. This is an asynchronous process, which JavaScript
+            supports well via the <code>fetch</code> function, which I used in
+            previous iterations of the engine. <code>fetch</code> returns a
+            JavaScript <code>Promise</code> object, which symbolizes some
+            asynchronous work to be done. However, this caused extra
+            complication of the engine because a core part of the system was
+            in JavaScript - ideally, all the "hard work" should be done on the
+            Rust side. <a
+                href="https://blog.rust-lang.org/2019/11/07/Async-await-stable.html">This
+                wasn't possible in stable Rust until November 7th, 2019</a>,
+            hence the convoluted use of JavaScript. The newest version of the
+            engine moves all of the resource loading code onto the Rust side,
+            using Rust's new asynchronous programming conveniences such as
+            <code>Future</code>s (analogous to JS <code>Promise</code>s), and
+            the <code>async</code>/<code>await</code> keywords.
+            </p>
+
+            <p>
+            In code, the asynchronous resource fetching looks like this (from
+            <code>resource.js</code>):
+
+            <pre><code class="language-rust">/// Load a text resource from the server
+/// Used for mesh, material, shader
+#[wasm_bindgen]
+pub async fn load_text_resource(path: String) -> Result<JsValue, JsValue> {
+    info!("Loading text resource {}", path);
+
+    let mut opts = RequestInit::new();
+    opts.method("GET");
+    opts.mode(RequestMode::Cors);
+
+    let request = Request::new_with_str_and_init(&path, &opts)?;
+
+    let window = web_sys::window().unwrap();
+    let resp_value =
+        JsFuture::from(window.fetch_with_request(&request)).await?;
+
+    let resp: Response = resp_value.dyn_into().unwrap_or_else(|err| {
+        error_panic!("Response is not a Response: {:?}", err);
+    });
+
+    // Convert this other `Promise` into a rust `Future`.
+    let text = JsFuture::from(resp.text()?).await?;
+    Ok(text)
+}</code></pre>
+
+            There is definitely a bit of rigmarole when converting between JS
+            objects and Rust objects, but aside from that, the
+            <code>window.fetch_with_request()</code> method functions
+            similarly to the JavaScript <code>fetch()</code> function. One
+            additional item to note is the <code>#[wasm_bindgen]</code>
+            attribute above the function header - this signifies that this
+            function can be used on the JavaScript side of the engine if we
+            want - handy if any scripts want to load their own resources from
+            our server, or even from arbitrary web locations.
+            </p>
+
+            <h4>Scene management</h4>
+            <p>
+            All of these asynchronous improvements allow text assets
+            (Wavefront OBJ files, scene files, Wavefront materials) and image
+            assets (textures) to be loaded nicely inside of a newly developed
+            scene management system.  In previous iterations of the engine,
+            all textures and meshes were owned directly by the
+            <code>RenderSystem</code>. In the new framework, the scene manager
+            parses a scene file, and loads assets into a scene. In order to
+            save bandwidth, each asset is loaded <strong>just once</strong>. A
+            scene file is a JSON file with the following information:
+            </p>
+
+            <ul>
+                <li>A map of prefabs. Each prefab is keyed by its name, and
+                    contains, optionally:
+                    <ul>
+                        <li><code>mesh</code>: path to obj file</li>
+                        <li><code>shader</code>: what shader to use for this
+                            prefab</li>
+                        <li><code>scripts</code>: an array of
+                            <code>WreScripts</code> to attach to all instances
+                        of this prefab</li>
+                    </ul>
+                </li>
+
+                <li>A list of point lights. Each light may include a
+                    <code>color</code>, a <code>position</code>, and a
+                    <code>halo_intensity</code>.</li>
+
+                <li>A list of spot lights. Each light may include a
+                    <code>color</code>, a <code>position</code>, a
+                    <code>direction</code>, a <code>angle_inside</code>, an
+                    <code>angle_outside</code> and a
+                    <code>halo_intensity</code>.</li>
+
+                <li>A list of entities to instantiate. Each entity may
+                    include:
+                    <ul>
+                        <li><code>prefab</code>: what prefab to use when
+                            instantiating this object</li>
+                        <li><code>position</code>: transform position of the
+                            entity</li>
+                        <li><code>rotation</code>: transform rotation of the
+                            entity</li>
+                        <li><code>scale</code>: transform scale of the
+                            entity</li>
+                    </ul>
+                </li>
+
+                <li>An initial camera position.</li>
+            </ul>
+
+            <p>
+            Using the same asynchronous asset loading framework, materials can
+            now be loaded from Wavefront MTL files. Currently not all aspect
+            of the MTL file are used - simply the diffuse and specular color,
+            as well as the specular highlight exponent.
+            </p>
+
+            <h4>Camera System</h4>
+            <p>
+            Previous iterations of the engine had hard-coded view and
+            projection matrices in the vertex shader, since I had designed it
+            around a particular application which didn't require camera
+            movement. However, this is certainly a nice thing to have, since
+            sometimes the origin is inside of an object, and it's helpful to
+            have control over where the user starts out.
+            </p>
+
+
+            <h2>Limitations/Tradeoffs</h2>
+
+            <h3>Forward Rendering</h3>
+            <p>
+            I really wish I had used deferred rendering for this project,
+            especially since
+            <a href="https://bridger-herman.github.io/project-writeups/project-deferred.html">I've
+                                 already done it once</a>.
+             Toward the end when I was designing scenes, I put a bunch of
+             lights in and naturally, forward rendering is quite slow for
+             these purposes.
+            </p>
+
+            <h3>Simplicity vs. Speed</h3>
+            <p>
+            Throughout the parts of the engine that are implemented so far,
+            there is a common theme of "Simplicity over Speed." In pretty much
+            every instance where there was a tradeoff between simplicity and
+            speed, I went for the simpler, more understandable approach. This
+            has led to some pretty poor performance overall within the engine,
+            so something I would like to do in the future is set up a
+            benchmarking system to find out where the bottlenecks are
+            happening.
+            </p>
+
+            <p>
+            I suspect there's something off with the way I'm interacting
+            between the WebAssembly and the JavaScript - I believe there are
+            many superfluous copies of the data being made by the
+            <code>wasm_bindgen</code> library, but it's difficult to actually
+            tell what's going on.
+            </p>
+
+
+            <h2>Code</h2>
+            <p>
+            Code from this project can be found in
+            <a href="https://github.com/bridger-herman/volumetric-lighting">this GitHub repo</a>.
+            </p>
+
+            <p>The following Rust (WebAssembly) libraries were used:</p>
+            <ul>
+                <li>wasm-bindgen: generation of JS bindings for Rust functions
+                    and objects</li>
+                <li>wasm-bindgen-futures: conversion of JS async/await
+                    concepts into compatible concepts in Rust</li>
+                <li>js-sys: moving objects between JS and Rust</li>
+                <li>web-sys: interacting with the browser from Rust</li>
+                <li>wasm-logger: console log from Wasm</li>
+                <li>serde: object serialization and deserialization</li>
+                <li>lazy_static: state management</li>
+                <li>instant: hack because <code>std::time::Instant::now</code>
+                    doesn't work in Wasm)</li>
+                <li>obj: parsing obj files</li>
+                <li>base64: converting to and from base64 bytes</li>
+                <li>png: encoding and decoding png images for textures</li>
+                <li>glam: my version of glam-rs, a vector/matrix math library
+                    - hacked up to be WebAssembly compatible (regular GLM
+                    requires libc, which isn't available for wasm)</li>
+            </ul>
+        </article>
+        <script src="./assets/prism/prism.js"></script>
+    </body>
+</html>
